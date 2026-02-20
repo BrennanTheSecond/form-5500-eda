@@ -1,0 +1,423 @@
+---
+title: "Form 5500 Benefits Insurance Analysis"
+subtitle: "Company Clustering & Benefits Insurance Scoring"
+author: "Data Science Team"
+date: "February 2026"
+format: 
+  pptx:
+    slide-number: true
+    margin-left: 0.5
+    margin-right: 0.5
+    margin-top: 0.5
+    margin-bottom: 0.5
+---
+
+## Executive Summary
+
+**Overview**
+
+- Analysis of ~420K companies with ERISA Form 5500 filing data (sample)
+- Covers years 2020-2024 with historical data
+- Data source: Department of Labor Form 5500 filings
+
+**Key Findings**
+
+- Peak filing year: 2023 with **146,403 companies** (raw data)
+- 83% of companies have fewer than 50 enrolled employees
+- Top industries: Healthcare, Professional Services, Construction
+- Top Brokers: USI, Gallagher, Lockton, Marsh & McLennan
+- Welfare plans: 73,677 | Pension plans: 421,818
+
+**Speaker Notes:**
+
+This presentation covers our exploratory data analysis of Form 5500 filings - the primary regulatory filings for employee benefit plans in the US. This data is foundational for our company clustering and benefits insurance scoring initiative. The analysis reveals a highly fragmented market dominated by small businesses, with significant consolidation among brokers and carriers.
+
+---
+
+## Question 1: How Many Companies File Each Year?
+
+### Filing Trends (2020-2024)
+
+| Year | Companies Filing |
+|------|-----------------|
+| 2020 | 156,805 |
+| 2021 | 155,304 |
+| 2022 | 155,289 |
+| 2023 | 146,403 |
+| 2024 | 126,620 |
+
+![Companies Filing by Year](plots/companies_filing_by_year.png)
+
+### Key Observations
+
+- **Stable volumes**: ~150K companies file annually (2020-2023)
+- **2024 decline**: Likely due to incomplete data for latest year
+- **500K filings sample** analyzed for detailed attributes
+
+**Speaker Notes:**
+
+This chart shows Form 5500 filings over time using raw data files for accurate company counts. The volumes have been relatively stable around 150K companies per year. The decline in 2024 likely reflects incomplete data collection rather than an actual market decrease.
+
+---
+
+## Question 2: Size Range by Enrolled Employees
+
+### Distribution Statistics
+
+- **Median**: 11 enrolled employees
+- **Mean**: 183 employees
+- **25th percentile**: 3 employees
+- **75th percentile**: 35 employees
+
+### Size Bin Distribution
+
+| Size Range | Filings | Percentage |
+|-----------|---------|------------|
+| 0 (No Participants) | 72,793 | 14.6% |
+| 1-10 (Micro) | 175,647 | 35.1% |
+| 11-50 (Small) | 155,233 | 31.0% |
+| 51-100 (Small-Medium) | 41,515 | 8.3% |
+| 101-500 (Medium) | 39,476 | 7.9% |
+| 501-1000 (Medium-Large) | 6,506 | 1.3% |
+| 1001-5000 (Large) | 6,504 | 1.3% |
+| 5000+ (Enterprise) | 2,326 | 0.5% |
+
+![Size Distribution](plots/size_distribution.png)
+
+**Speaker Notes:**
+
+This slide reveals a critically important insight: the benefits market is overwhelmingly composed of small businesses. Over half of all companies filing Form 5500 have 10 or fewer employees. This skew has major implications for our clustering and scoring models.
+
+---
+
+## Question 3: Primary Industry from NAICS Codes
+
+### Top Industries by NAICS Code
+
+1. **621111** - Offices of Physicians: 32,269 filings
+2. **621210** - Offices of Dentists: 22,643 filings
+3. **541990** - Other Professional Services: 21,457 filings
+4. **541110** - Offices of Lawyers: 20,926 filings
+5. **611000** - Elementary/Secondary Schools: 10,737 filings
+
+### Sector Distribution
+
+| Sector | Filings |
+|--------|---------|
+| Professional, Scientific, and Technical Services | 98,207 |
+| Health Care and Social Assistance | 91,577 |
+| Construction | 42,586 |
+| Manufacturing | 33,196 |
+| Other Services | 31,422 |
+| Finance and Insurance | 31,151 |
+| Retail Trade | 29,822 |
+
+![Sector Distribution](plots/sector_distribution.png)
+
+**Speaker Notes:**
+
+Industry analysis reveals Professional Services and Healthcare dominate Form 5500 filings. This makes sense given:
+1. Professional services firms (lawyers, consultants) have high 401(k) adoption
+2. Healthcare providers (physicians, dentists) often sponsor retirement plans
+3. These industries have stable, W2-employed workforces
+
+---
+
+## Question 4: Benefits Program Structure
+
+### Welfare vs Pension
+
+- **Welfare plans**: 73,677 filings
+- **Pension plans**: 421,818 filings
+
+### Benefits by Company Size
+
+![Benefits by Size](plots/benefits_by_size.png)
+
+### Benefits by Sector
+
+![Benefits by Sector](plots/benefits_by_sector.png)
+
+### Premium Per Life by Sector
+
+| Sector | Premium per Life |
+|--------|-----------------|
+| Construction | $790 |
+| Professional Services | $758 |
+| Accommodation/Food | $629 |
+| Finance/Insurance | $574 |
+| Health Care | $516 |
+| Manufacturing | $486 |
+| Information | $475 |
+| Retail Trade | $309 |
+
+![Premium per Life by Sector](plots/premium_per_life_sector.png)
+
+**Speaker Notes:**
+
+This slide shows the financial magnitude of benefits programs and reveals important patterns:
+1. Pension plans dominate filings (421K vs 73K welfare)
+2. Premium per life varies significantly by industry
+3. Construction has highest per-capita premiums ($790)
+4. Retail has lowest ($309)
+
+---
+
+## Question 5: Top Brokers
+
+### Top 10 Brokers by Filings
+
+| Rank | Broker | Filings |
+|------|--------|---------|
+| 1 | USI Insurance Services | 12,891 |
+| 2 | Gallagher Benefit Services | 9,932 |
+| 3 | Lockton Companies | 9,861 |
+| 4 | Marsh & McLennan Agency | 9,492 |
+| 5 | Mercer Health & Benefits | 6,033 |
+| 6 | Willis Towers Watson | 4,306 |
+| 7 | Alliant Insurance Services | 3,317 |
+| 8 | Edgewood Partners Insurance | 2,641 |
+| 9 | Aon Consulting | 2,437 |
+| 10 | Digital Insurance | 2,008 |
+
+**Total**: 30,984 unique brokers in sample
+
+![Top Brokers](plots/top_brokers.png)
+
+**Speaker Notes:**
+
+The broker market shows significant concentration:
+1. Top 4 brokers serve ~42K filings combined
+2. Long tail: 30K+ unique brokers, but most have few clients
+3. Name standardization needed for accurate analysis
+
+---
+
+## Question 5: Top Carriers
+
+### Top 10 Carriers by Filings
+
+| Rank | Carrier | Filings |
+|------|---------|---------|
+| 1 | Life Insurance Company of North America | 23,175 |
+| 2 | United of Omaha Life | 21,419 |
+| 3 | Lincoln National Life | 19,100 |
+| 4 | Metropolitan Life | 18,841 |
+| 5 | Unum Life Insurance | 18,477 |
+| 6 | Principal Life Insurance | 16,947 |
+| 7 | Vision Service Plan | 16,111 |
+| 8 | Guardian Life | 11,850 |
+| 9 | UnitedHealthcare Insurance | 10,876 |
+| 10 | Standard Insurance Company | 9,551 |
+
+**Total**: 12,844 unique carriers in sample
+
+![Top Carriers](plots/top_carriers.png)
+
+**Speaker Notes:**
+
+Carrier analysis reveals:
+1. Life insurance companies dominate (retirement/401k focus)
+2. Health carriers present: UnitedHealthcare at #9
+3. 12K+ unique carriers suggests multi-carrier common
+
+---
+
+## Product Offerings Overview
+
+### Benefit Types from Form 5500
+
+- **Health Insurance** - Most common welfare benefit
+- **Dental & Vision** - Often bundled with health
+- **Life Insurance** - Common supplemental benefit
+- **STD/LTD** - Disability coverage
+- **Pension/401(k)** - Retirement benefits
+
+### Carrier Product Heatmap
+
+![Carrier Products Heatmap](plots/carrier_products_heatmap.png)
+
+### Broker Product Heatmap
+
+![Broker Products Heatmap](plots/broker_products_heatmap.png)
+
+**Speaker Notes:**
+
+Product analysis shows:
+1. Carriers typically offer multiple product types
+2. Health, life, and disability most common
+3. Top brokers represent diverse product portfolios
+
+---
+
+## Geographic Distribution
+
+### Top 10 States
+
+| State | Filings |
+|-------|---------|
+| CA | 71,358 |
+| NY | 38,373 |
+| TX | 29,983 |
+| FL | 25,008 |
+| OH | 22,226 |
+| IL | 21,023 |
+| PA | 20,968 |
+| NJ | 18,756 |
+| MA | 17,193 |
+| MI | 15,278 |
+
+![State Distribution](plots/state_distribution.png)
+
+**Speaker Notes:**
+
+Geographic analysis reveals:
+1. California dominates with 71K filings
+2. NY, TX, FL follow - consistent with population
+3. Heavy concentration in coastal/urban states
+
+---
+
+## Data Quality Notes
+
+### Known Issues
+
+1. **Missing NAICS**: Many companies show "Unknown" for industry
+2. **Name standardization**: Broker/carrier names need deduplication
+3. **Outlier detection**: Some premium values appear incorrect
+4. **2024 data**: May be incomplete due to reporting delays
+
+### Data Processing Applied
+
+- Successfully handled numpy array format in year columns
+- Created safe type conversions for NAICS codes
+- Added error handling for empty data visualizations
+
+**Speaker Notes:**
+
+We identified several data quality issues:
+1. NAICS mapping gaps exist in the processed data
+2. Name deduplication is critical for accurate broker/carrier analysis
+3. Some premium outliers need investigation
+
+---
+
+## Summary Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total Filings (sample) | 500,000 |
+| Unique Companies (sample) | 419,872 |
+| Unique Carriers | 12,844 |
+| Unique Brokers | 30,984 |
+| Unique NAICS Codes | 706 |
+| Avg Plan Size (participants) | 183 |
+| Median Plan Size | 11 |
+| Welfare Filings | 73,677 |
+| Pension Filings | 421,818 |
+
+---
+
+## Clustering Model Recommendations
+
+### Recommended Algorithms
+
+1. **K-Means Clustering**
+   - Best for: Initial segmentation with spherical clusters
+   - Features: Company size, carrier count, product types
+
+2. **Hierarchical Clustering**
+   - Best for: Industry-specific groupings
+   - Reveals nested relationships in NAICS codes
+
+3. **DBSCAN**
+   - Best for: Finding natural clusters and outliers
+   - Identifies unusual benefits profiles
+
+4. **Gaussian Mixture Models (GMM)**
+   - Best for: Probabilistic cluster assignments
+   - Companies can belong to multiple segments
+
+**Speaker Notes:**
+
+Based on our EDA, here's our recommended clustering approach:
+- K-Means is starting point - interpretable, works well for size-based segments
+- GMM recommended for production because benefits programs aren't mutually exclusive
+
+---
+
+## Key Features for Clustering
+
+### Size Features
+- `total_all_participants` - Plan participant count
+- `benefits_eligible` - Employees eligible for benefits
+- Plan size category (small/large)
+
+### Industry Features
+- NAICS sector (first 2 digits)
+- NAICS subsector (first 3 digits)
+- Multi-sector indicator
+
+### Benefits Program Features
+- Number of unique carriers
+- Number of unique brokers
+- Product types (health, dental, vision, life, etc.)
+- Welfare vs pension indicators
+- Total premiums
+
+### Geographic Features
+- State/region
+
+---
+
+## Recommendations & Next Steps
+
+### Immediate Actions
+
+1. **Feature Engineering**: Create binary indicators for each product type
+2. **Feature Scaling**: Normalize participant counts and premium values
+3. **Dimensionality Reduction**: Consider PCA if features are correlated
+
+### Validation
+
+- Use silhouette score to determine optimal cluster count
+- Elbow method for K-Means
+- Cross-validate across time periods
+
+### Scoring Model
+
+- Once clusters defined, score each company
+- Consider: benefits complexity, premium levels, carrier quality
+- Build predictive model for benefits needs
+
+**Speaker Notes:**
+
+Our immediate next steps:
+1. Feature engineering: Transform raw data into cluster-friendly features
+2. Validation: Determine how many clusters make business sense
+3. Scoring: After clustering, assign "benefits sophistication scores"
+
+---
+
+## Questions & Discussion
+
+### Contact
+
+- Data Science Team
+- [Your contact information]
+
+### Additional Resources
+
+- Form 5500 Documentation
+- NAICS Code Reference
+- Raw Data Files: `form-5500-data/raw/`
+- Processed Data: `form-5500-data/processed/`
+- Visualizations: `plots/`
+
+**Speaker Notes:**
+
+Thank you for your attention. I'm happy to take questions about:
+- Data methodology and sources
+- Clustering approach recommendations
+- Feature engineering decisions
+- Timeline for production scoring model
